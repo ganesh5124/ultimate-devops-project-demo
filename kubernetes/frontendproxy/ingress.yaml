@@ -1,20 +1,33 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: frontend-proxy
+  name: voting
+  namespace: vote
   annotations:
-    alb.ingress.kubernetes.io/scheme: internet-facing
-    alb.ingress.kubernetes.io/target-type: ip
+    kubernetes.io/ingress.class: "alb"
+    alb.ingress.kubernetes.io/scheme: "internet-facing"  # Change to "internal" if needed
+    alb.ingress.kubernetes.io/target-type: "ip"
 spec:
   ingressClassName: alb
   rules:
-    - host: example.com
+    - host: vote.shoppingcart5124uuid.shop
       http:
         paths:
-          - path: "/"
+          - path: "/vote"
             pathType: Prefix
             backend:
               service:
-                name: opentelemetry-demo-frontendproxy
+                name: vote
                 port:
                   number: 8080
+    - host: result.shoppingcart5124uuid.shop
+      http:
+        paths: 
+          - path: "/result"
+            pathType: Prefix
+            backend:
+              service:
+                name: result
+                port:
+                    number: 8081
+
